@@ -1,0 +1,143 @@
+import type { BudgetItem, Program } from '../types'
+
+const b = (id: string, uraian: string, satuan: string, catatan = ''): BudgetItem => ({
+  id,
+  uraian,
+  volume: '',
+  satuan,
+  hargaSatuan: null,
+  catatan,
+})
+
+// Kerangka 6 program mengikuti brief (rekomendasi). Isian yang membutuhkan data RS dibiarkan kosong.
+export const DEFAULT_PROGRAM: Program[] = [
+  {
+    id: 'p1',
+    kode: 'P1',
+    nama: 'Penguatan tata kelola PPRA',
+    latarBelakang:
+      'Terjadi pergantian Ketua Komite PPRA. Dokumen Program Kerja 2026 masih mencantumkan ketua sebelumnya, sehingga penetapan ketua baru, struktur, dan uraian tugas perlu diformalkan melalui SK Direktur.',
+    tujuan: 'Komite PPRA memiliki mandat, struktur, pembagian tugas, dan mekanisme kerja yang jelas dan sah.',
+    kegiatan: [
+      'Pembaruan SK dan struktur Komite PPRA.',
+      'Pembagian tugas anggota.',
+      'Rapat koordinasi berkala dan mekanisme pelaporan.',
+    ].join('\n'),
+    sasaran: 'Seluruh anggota Komite PPRA dan Direktur/manajemen.',
+    unitPJ: 'Ketua Komite PPRA; Direktur (pengesahan SK)',
+    indikator: 'SK Komite PPRA terbaru terbit; rapat komite terlaksana dan terdokumentasi sesuai jadwal yang ditetapkan.',
+    timeline: 'SK: Januari 2027 (usulan). Rapat: berkala sepanjang tahun.',
+    sumberDaya: 'Sekretariat (notulen, arsip), ruang rapat.',
+    dokumentasi: 'SK Direktur, uraian tugas, undangan, daftar hadir, notulen rapat.',
+    anggaran: [b('p1-b1', 'Rapat koordinasi Komite PPRA', 'kali'), b('p1-b2', 'Penggandaan dokumen dan ATK', 'paket')],
+  },
+  {
+    id: 'p2',
+    kode: 'P2',
+    nama: 'Penguatan kebijakan penggunaan antibiotik',
+    latarBelakang:
+      'Dokumen 2026 menjadwalkan revisi kebijakan/pedoman/panduan pada Mei 2026; status pelaksanaannya belum diverifikasi. Kebijakan perlu diselaraskan dengan pedoman nasional yang berlaku dan kondisi RS.',
+    tujuan: 'Tersedia kebijakan/panduan penggunaan antibiotik yang mutakhir, disahkan, dan tersosialisasi kepada klinisi terkait.',
+    kegiatan: [
+      'Review kebijakan/panduan penggunaan antibiotik yang ada.',
+      'Penyelarasan dengan pedoman nasional (Permenkes 28/2021 tentang Pedoman Penggunaan Antibiotik) dan kondisi rumah sakit.',
+      'Penyusunan/penyesuaian PPK dan panduan penggunaan antibiotik terapi dan profilaksis (PPAB) oleh tenaga klinis/farmasi berwenang (STARKES PROGNAS 6.1 EP2).',
+      'Sosialisasi panduan kepada klinisi terkait.',
+    ].join('\n'),
+    sasaran: 'Staf medis, farmasis, dan perawat di unit terkait.',
+    unitPJ: 'Komite PPRA bersama Komite Medik dan Farmasi (penyusunan isi klinis oleh tenaga klinis/farmasi berwenang)',
+    indikator: 'Dokumen kebijakan/panduan tersedia dan disahkan; unit sasaran yang menerima sosialisasi.',
+    timeline: 'Review: Februari–April 2027; pengesahan dan sosialisasi: Mei–Juni 2027 (usulan).',
+    sumberDaya: 'Tim penyusun klinis dan farmasi, akses pedoman nasional terbaru.',
+    dokumentasi: 'Draft dan dokumen final yang disahkan, materi sosialisasi, daftar hadir.',
+    anggaran: [b('p2-b1', 'Rapat penyusunan/review panduan', 'kali'), b('p2-b2', 'Sosialisasi panduan', 'kegiatan'), b('p2-b3', 'Penggandaan panduan', 'eksemplar')],
+  },
+  {
+    id: 'p3',
+    kode: 'P3',
+    nama: 'Audit dan evaluasi penggunaan antibiotik',
+    latarBelakang:
+      'Dokumen 2026 menetapkan sasaran perbaikan kuantitas dan kualitas penggunaan antibiotik. Belum diketahui apakah audit penggunaan antibiotik pernah dilakukan dan apakah data penggunaan tersedia.',
+    tujuan: 'Tersedia data dan hasil evaluasi penggunaan antibiotik sebagai dasar umpan balik dan perbaikan.',
+    kegiatan: [
+      'Audit kualitas penggunaan antibiotik (metode Gyssens menurut Lampiran Permenkes 8/2015).',
+      'Audit kuantitas penggunaan (ATC/DDD per 100 patient-days menurut Lampiran Permenkes 8/2015).',
+      'Evaluasi indikasi, pilihan, dosis, rute, dan durasi sesuai konteks klinis (oleh tenaga klinis/farmasi berwenang).',
+      'Umpan balik kepada unit/dokter terkait.',
+    ].join('\n'),
+    sasaran: 'Unit pelayanan yang ditetapkan setelah pemetaan (perlu konfirmasi).',
+    unitPJ: 'Farmasi dan klinisi, dikoordinasikan Komite PPRA',
+    indikator: 'Audit terlaksana dan hasil terdokumentasi; rekap penggunaan antibiotik tersedia.',
+    timeline: 'Pemetaan data: Januari–Februari 2027; audit dan rekap: berkala (usulan).',
+    sumberDaya: 'Farmasis, dokter reviewer, akses rekam medis sesuai kewenangan, dukungan IT.',
+    dokumentasi: 'Instrumen audit, rekap hasil, laporan umpan balik.',
+    anggaran: [b('p3-b1', 'Pelaksanaan audit (honor/transport sesuai ketentuan RS)', 'kegiatan', 'Mengikuti ketentuan RS'), b('p3-b2', 'Pengolahan data', 'paket')],
+  },
+  {
+    id: 'p4',
+    kode: 'P4',
+    nama: 'Surveilans resistansi antimikroba',
+    latarBelakang:
+      'Dokumen 2026 mencantumkan surveilans pola mikroba dan kepekaannya. Belum diketahui kapasitas laboratorium (kultur dan uji kepekaan) dan apakah antibiogram pernah dibuat.',
+    tujuan: 'Data kultur dan uji kepekaan terkumpul, tervalidasi, dan dapat dilaporkan sesuai pedoman surveilans yang berlaku.',
+    kegiatan: [
+      'Koordinasi data kultur dan uji kepekaan.',
+      'Review kualitas dan kelengkapan data.',
+      'Penyusunan antibiogram bila jumlah dan kualitas data memenuhi syarat.',
+      'Pelaporan sesuai pedoman surveilans yang berlaku (Kepdirjen Keslan 1476/2026; kewajiban teknis penuh hanya bila RSCC ditetapkan sebagai lokus – perlu konfirmasi).',
+    ].join('\n'),
+    sasaran: 'Data laboratorium mikrobiologi RS / laboratorium rujukan (perlu konfirmasi).',
+    unitPJ: 'Laboratorium, dikoordinasikan Komite PPRA',
+    indikator: 'Data kultur dan sensitivitas tervalidasi tersedia; laporan surveilans disampaikan sesuai pedoman.',
+    timeline: 'Koordinasi data: Januari–Maret 2027; rekap berkala; penilaian kelayakan antibiogram: akhir tahun (usulan).',
+    sumberDaya: 'Analis laboratorium, sistem pencatatan hasil, dukungan IT.',
+    dokumentasi: 'Rekap data, catatan validasi, laporan surveilans.',
+    anggaran: [b('p4-b1', 'Dukungan pemeriksaan laboratorium', 'paket', 'Perlu kajian bersama Laboratorium'), b('p4-b2', 'Pengolahan dan validasi data', 'paket')],
+  },
+  {
+    id: 'p5',
+    kode: 'P5',
+    nama: 'Penguatan PPI',
+    latarBelakang:
+      'Tujuan kedua program 2026 adalah mencegah penyebaran mikroba resisten melalui kepatuhan terhadap prinsip PPI. Kolaborasi PPRA–PPI perlu dipastikan berjalan.',
+    tujuan: 'Kolaborasi PPRA dan PPI berjalan terjadwal dengan tindak lanjut temuan yang terdokumentasi.',
+    kegiatan: [
+      'Koordinasi dengan tim PPI.',
+      'Monitoring kewaspadaan standar dan transmisi.',
+      'Tindak lanjut temuan terkait mikroba multiresisten.',
+    ].join('\n'),
+    sasaran: 'Unit pelayanan dan tim PPI.',
+    unitPJ: 'Tim/Komite PPI bersama Komite PPRA',
+    indikator: 'Hasil monitoring PPI dan tindak lanjut terdokumentasi (mengikuti indikator PPI RS).',
+    timeline: 'Rapat koordinasi PPRA–PPI berkala (usulan: triwulan).',
+    sumberDaya: 'IPCN/tim PPI, data monitoring PPI.',
+    dokumentasi: 'Notulen rapat bersama, laporan monitoring PPI, catatan tindak lanjut.',
+    anggaran: [b('p5-b1', 'Rapat koordinasi PPRA–PPI', 'kali')],
+  },
+  {
+    id: 'p6',
+    kode: 'P6',
+    nama: 'Edukasi, kajian kasus, dan evaluasi',
+    latarBelakang:
+      'Sasaran 2026 mencakup peningkatan mutu penanganan kasus infeksi secara multidisiplin melalui forum kajian kasus infeksi terintegrasi, serta pencatatan triwulan dan laporan tahunan.',
+    tujuan: 'Tenaga kesehatan memperoleh edukasi PPRA, forum kajian kasus berjalan, dan program dievaluasi serta dilaporkan.',
+    kegiatan: [
+      'Edukasi tenaga kesehatan.',
+      'Forum kajian kasus infeksi multidisiplin.',
+      'Monitoring triwulan.',
+      'Evaluasi dan laporan tahunan.',
+    ].join('\n'),
+    sasaran: 'Dokter, perawat, farmasis, analis laboratorium.',
+    unitPJ: 'Komite PPRA',
+    indikator: 'Unit sasaran yang menerima edukasi; forum dan rekomendasi terdokumentasi; laporan triwulan dan tahunan tersusun.',
+    timeline: 'Edukasi dan forum berkala; evaluasi triwulan (Maret, Juni, September, Desember); laporan tahunan Desember 2027 (usulan).',
+    sumberDaya: 'Narasumber internal/eksternal, ruang pertemuan, sekretariat.',
+    dokumentasi: 'Materi, daftar hadir, notulen forum, laporan triwulan dan tahunan.',
+    anggaran: [
+      b('p6-b1', 'Pelatihan/workshop/seminar SDM', 'kegiatan'),
+      b('p6-b2', 'Forum kajian kasus infeksi', 'kali'),
+      b('p6-b3', 'Rapat monitoring dan evaluasi triwulan', 'kali'),
+      b('p6-b4', 'Penyusunan laporan tahunan', 'paket'),
+    ],
+  },
+]

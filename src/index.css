@@ -1,0 +1,86 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --color-navy-50: #f1f5fb;
+  --color-navy-100: #e1e9f5;
+  --color-navy-200: #c3d3eb;
+  --color-navy-600: #1d4ed8;
+  --color-navy-700: #1e3a8a;
+  --color-navy-800: #172e6b;
+  --color-navy-900: #0f1f4a;
+}
+
+html {
+  color: #1f2937;
+  background: #fff;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.editable {
+  background: #f6f9ff;
+  border: 1px solid #c3d3eb;
+  border-radius: 6px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.editable:hover {
+  border-color: #93acd6;
+}
+.editable:focus {
+  outline: none;
+  border-color: #1d4ed8;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(29 78 216 / 0.15);
+}
+.editable::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 12mm;
+  }
+  body {
+    font-size: 11px;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-hide-field {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .print-break {
+    break-before: page;
+  }
+  table {
+    break-inside: auto;
+  }
+  tr {
+    break-inside: avoid;
+  }
+  .shadow-sm {
+    box-shadow: none !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
