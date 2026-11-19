@@ -7,8 +7,8 @@ import { STATUS_KEGIATAN, type JenisTimeline, type TimelineItem } from '../types
 import { uid } from '../lib/utils'
 
 const JENIS_CLS: Record<JenisTimeline, string> = {
-  kegiatan: 'bg-navy-700',
-  milestone: 'bg-navy-900',
+  kegiatan: 'bg-ink-700',
+  milestone: 'bg-ink-900',
   evaluasi: 'bg-amber-500',
   laporan: 'bg-emerald-600',
 }
@@ -36,22 +36,22 @@ export default function Timeline() {
           </>
         }
       />
-      <div className="flex flex-wrap gap-3 text-xs text-slate-600">
+      <div className="flex flex-wrap gap-3 text-xs text-stone-600">
         {JENIS.map((j) => <span key={j} className="inline-flex items-center gap-1.5"><span className={`inline-block h-3 w-5 rounded-sm ${JENIS_CLS[j]}`} />{JENIS_LABEL[j]}</span>)}
       </div>
       {edit && <Note>Mode edit aktif: klik sel bulan untuk menandai/menghapus jadwal. Perubahan tersimpan otomatis.</Note>}
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200">
-        <table className="w-full min-w-[980px] border-collapse bg-white text-sm">
+      <div className="scrollbar-thin overflow-x-auto">
+        <table className="w-full min-w-[860px] border-collapse text-sm sm:min-w-[980px]">
           <thead>
-            <tr className="bg-navy-50 text-xs font-semibold uppercase tracking-wide text-navy-800">
-              <th className="sticky left-0 z-10 w-72 border-b border-slate-200 bg-navy-50 px-2 py-2 text-left">Kegiatan</th>
-              <th className="w-40 border-b border-slate-200 px-2 py-2 text-left">PIC</th>
-              <th className="w-32 border-b border-slate-200 px-2 py-2 text-left">Status</th>
+            <tr className="bg-ink-50 text-xs font-medium text-ink-600">
+              <th className="sticky left-0 z-10 w-44 border-b sm:w-72 border-stone-200 bg-ink-50 px-2 py-2 text-left">Kegiatan</th>
+              <th className="w-40 border-b border-stone-200 px-2 py-2 text-left">PIC</th>
+              <th className="w-32 border-b border-stone-200 px-2 py-2 text-left">Status</th>
               {BULAN.map((b, i) => (
-                <th key={b} className={`border-b border-slate-200 px-0 py-2 text-center ${i % 3 === 2 ? 'border-r border-r-slate-300' : ''}`}>{b}</th>
+                <th key={b} className={`border-b border-stone-200 px-0 py-2 text-center ${i % 3 === 2 ? 'border-r border-r-stone-300' : ''}`}>{b}</th>
               ))}
-              {edit && <th className="no-print w-8 border-b border-slate-200" />}
+              {edit && <th className="no-print w-8 border-b border-stone-200" />}
             </tr>
           </thead>
           <tbody>
@@ -59,12 +59,12 @@ export default function Timeline() {
               const rows = state.timeline.filter((t) => t.programId === p.id)
               return [
                 <tr key={p.id}>
-                  <td colSpan={15 + (edit ? 1 : 0)} className="border-b border-slate-200 bg-slate-50 px-2 py-1.5 text-xs font-semibold text-navy-900">
+                  <td colSpan={15 + (edit ? 1 : 0)} className="border-b border-stone-200 bg-stone-50 px-2 py-1.5 text-xs font-semibold text-ink-900">
                     {p.kode}. {p.nama}
                     {edit && (
                       <button
                         type="button"
-                        className="no-print ml-3 text-navy-700 underline"
+                        className="no-print ml-3 text-ink-700 underline"
                         onClick={() => update((s) => { s.timeline.push({ id: uid('tl'), programId: p.id, kegiatan: 'Kegiatan baru', pic: '', bulan: [], jenis: 'kegiatan', status: 'Belum mulai', tenggat: '' }) })}
                       >
                         <Plus size={12} className="inline" /> tambah kegiatan
@@ -73,8 +73,8 @@ export default function Timeline() {
                   </td>
                 </tr>,
                 ...rows.map((t) => (
-                  <tr key={t.id} className="hover:bg-navy-50/30">
-                    <td className="sticky left-0 z-10 border-b border-slate-100 bg-white px-2 py-1.5">
+                  <tr key={t.id} className="hover:bg-ink-50/30">
+                    <td className="sticky left-0 z-10 max-w-44 border-b border-stone-100 bg-paper px-2 py-1.5 shadow-[1px_0_0_var(--color-ink-200)] sm:max-w-none">
                       {edit ? (
                         <div className="space-y-1">
                           <TextField value={t.kegiatan} onChange={(v) => set(t.id, { kegiatan: v })} ariaLabel="Nama kegiatan" />
@@ -84,15 +84,15 @@ export default function Timeline() {
                           </div>
                         </div>
                       ) : (
-                        <span className={t.jenis === 'milestone' ? 'font-semibold text-navy-900' : 'text-slate-800'}>
+                        <span className={t.jenis === 'milestone' ? 'font-semibold text-ink-900' : 'text-stone-800'}>
                           {t.jenis === 'milestone' && '◆ '}{t.kegiatan}
                         </span>
                       )}
                     </td>
-                    <td className="border-b border-slate-100 px-2 py-1.5 text-slate-600">
+                    <td className="border-b border-stone-100 px-2 py-1.5 text-stone-600">
                       {edit ? <TextField value={t.pic} onChange={(v) => set(t.id, { pic: v })} ariaLabel="PIC" placeholder="Perlu konfirmasi" /> : t.pic || <span className="text-amber-700">Perlu konfirmasi</span>}
                     </td>
-                    <td className="border-b border-slate-100 px-2 py-1.5">
+                    <td className="border-b border-stone-100 px-2 py-1.5">
                       <SelectField value={t.status} options={STATUS_KEGIATAN} onChange={(v) => set(t.id, { status: v })} ariaLabel={`Status ${t.kegiatan}`} className="text-xs" />
                     </td>
                     {BULAN.map((b, i) => {
@@ -103,14 +103,14 @@ export default function Timeline() {
                           key={b}
                           onClick={() => toggleBulan(t, m)}
                           title={edit ? `${on ? 'Hapus' : 'Tandai'} ${b}` : undefined}
-                          className={`border-b border-slate-100 px-0.5 py-1.5 ${i % 3 === 2 ? 'border-r border-r-slate-200' : ''} ${edit ? 'cursor-pointer hover:bg-navy-100' : ''}`}
+                          className={`border-b border-stone-100 px-0.5 py-1.5 ${i % 3 === 2 ? 'border-r border-r-stone-200' : ''} ${edit ? 'cursor-pointer hover:bg-ink-100' : ''}`}
                         >
                           {on && <div className={`mx-auto h-4 ${t.jenis === 'milestone' ? 'w-4 rotate-45 rounded-sm' : 'w-full rounded-sm'} ${JENIS_CLS[t.jenis]} ${t.status === 'Selesai' ? 'opacity-40' : ''}`} />}
                         </td>
                       )
                     })}
                     {edit && (
-                      <td className="no-print border-b border-slate-100">
+                      <td className="no-print border-b border-stone-100">
                         <Button variant="ghost" title="Hapus kegiatan" onClick={() => update((s) => { s.timeline = s.timeline.filter((x) => x.id !== t.id) })}><Trash2 size={14} /></Button>
                       </td>
                     )}
@@ -121,7 +121,7 @@ export default function Timeline() {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-slate-500">Garis vertikal tebal menandai batas triwulan. Evaluasi triwulan dijadwalkan pada akhir setiap triwulan, laporan tahunan pada Desember 2027.</p>
+      <p className="text-xs text-stone-500">Garis vertikal tebal menandai batas triwulan. Evaluasi triwulan dijadwalkan pada akhir setiap triwulan, laporan tahunan pada Desember 2027.</p>
     </div>
   )
 }

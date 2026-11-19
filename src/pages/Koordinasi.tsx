@@ -18,7 +18,7 @@ export default function Koordinasi() {
       <Note tone="warn">Jangan meminta atau membagikan data pasien secara bebas. Penggunaan data harus sesuai kewenangan, kebutuhan program, dan ketentuan kerahasiaan pasien.</Note>
       <nav className="no-print flex flex-wrap gap-2 text-sm" aria-label="Daftar unit">
         {KOORDINASI.map((u) => (
-          <a key={u.id} href="#/koordinasi" onClick={(e) => { e.preventDefault(); document.getElementById(`u-${u.id}`)?.scrollIntoView({ behavior: 'smooth' }) }} className="rounded-full border border-slate-200 px-3 py-1 text-navy-800 hover:bg-navy-50">
+          <a key={u.id} href="#/koordinasi" onClick={(e) => { e.preventDefault(); document.getElementById(`u-${u.id}`)?.scrollIntoView({ behavior: 'smooth' }) }} className="rounded-md border border-ink-200 px-2.5 py-1 text-ink-900 transition-colors hover:border-ink-900">
             {u.unit}
           </a>
         ))}
@@ -26,23 +26,23 @@ export default function Koordinasi() {
       <div className="grid gap-4 xl:grid-cols-2">
         {KOORDINASI.map((u) => (
           <Card key={u.id} id={`u-${u.id}`} title={u.unit}>
-            <p className="mb-3 text-sm text-slate-700"><span className="font-medium text-navy-900">Mengapa penting: </span>{u.mengapa}</p>
+            <p className="mb-3 text-sm text-stone-700"><span className="font-medium text-ink-900">Mengapa penting: </span>{u.mengapa}</p>
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
-                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Informasi yang diminta</h3>
+                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-500">Informasi yang diminta</h3>
                 <BulletList items={u.informasi} />
               </div>
               <div>
-                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Kegiatan bersama</h3>
+                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-500">Kegiatan bersama</h3>
                 <BulletList items={u.kegiatan} />
               </div>
               <div>
-                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Output yang diharapkan</h3>
+                <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-stone-500">Output yang diharapkan</h3>
                 <BulletList items={u.output} />
               </div>
             </div>
             {u.catatan && <div className="mt-3"><Note>{u.catatan}</Note></div>}
-            <div className="mt-4 grid gap-3 border-t border-slate-100 pt-3 sm:grid-cols-2">
+            <div className="mt-4 grid gap-3 border-t border-stone-100 pt-3 sm:grid-cols-2">
               <TextField label="PIC di unit ini" value={state.kontakUnit[u.id]?.pic ?? ''} onChange={(v) => setK(u.id, { pic: v })} placeholder="Nama/jabatan – perlu konfirmasi" />
               <TextField label="Tanggal pertemuan" type="date" value={state.kontakUnit[u.id]?.tanggal ?? ''} onChange={(v) => setK(u.id, { tanggal: v })} />
               <div className="sm:col-span-2">

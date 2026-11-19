@@ -9,15 +9,15 @@ import { Lampiran } from '../components/Lampiran'
 
 function KpiCard({ k, onChange, onDelete }: { k: Kpi; onChange: (p: Partial<Kpi>) => void; onDelete?: () => void }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-lg border border-ink-200 bg-card p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           {k.kategori === 'usulan' && k.id.startsWith('kpi-x') ? (
             <TextField value={k.nama} onChange={(v) => onChange({ nama: v })} ariaLabel="Nama indikator" placeholder="Nama indikator" />
           ) : (
-            <h3 className="font-semibold text-navy-900">{k.nama}</h3>
+            <h3 className="font-semibold text-ink-900">{k.nama}</h3>
           )}
-          <p className="mt-0.5 text-xs text-slate-500">Dasar: {k.rujukan || '—'}</p>
+          <p className="mt-0.5 text-xs text-stone-500">Dasar: {k.rujukan || '—'}</p>
         </div>
         <div className="flex items-center gap-1">
           {k.kategori === 'wajib' ? <Badge sumber="regulasi">Wajib (regulasi)</Badge> : <Badge sumber="rekomendasi">Usulan – tidak wajib</Badge>}
@@ -65,7 +65,7 @@ export default function KpiPage() {
       </Card>
 
       <Card title="Indikator wajib (regulasi)" right={<Badge sumber="regulasi" />}>
-        <p className="mb-3 text-sm text-slate-600">
+        <p className="mb-3 text-sm text-stone-600">
           Kewajiban yang dasar regulasinya terverifikasi per {formatTanggal(REGULASI_META.tanggalVerifikasi)} (Permenkes 8/2015 dan KMK HK.01.07/MENKES/1596/2024 – STARKES PROGNAS 6).
           Yang wajib adalah pelaksanaan dan pengukurannya, bukan angka targetnya. Cek ulang status regulasi di JDIH sebelum program disahkan.
         </p>
@@ -73,7 +73,7 @@ export default function KpiPage() {
       </Card>
 
       <Card title="Indikator usulan" right={<Badge sumber="rekomendasi">Tidak wajib</Badge>}>
-        <p className="mb-3 text-sm text-slate-600">Indikator proses/manajemen yang disarankan untuk memantau pelaksanaan program. Dapat dipakai, diubah, atau dihapus sesuai kesepakatan komite.</p>
+        <p className="mb-3 text-sm text-stone-600">Indikator proses/manajemen yang disarankan untuk memantau pelaksanaan program. Dapat dipakai, diubah, atau dihapus sesuai kesepakatan komite.</p>
         <div className="space-y-3">
           {list('usulan').map((k) => (
             <KpiCard key={k.id} k={k} onChange={(p) => set(k.id, p)} onDelete={() => update((s) => { s.kpi = s.kpi.filter((x) => x.id !== k.id) })} />

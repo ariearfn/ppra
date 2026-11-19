@@ -1,17 +1,43 @@
 import { useState } from 'react'
-import { ArrowRight, Plus, Trash2 } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { useStore } from '../state/store'
-import { Badge, Button, Card, Checkbox, EmptyState, Legend, PageHeader, ProgressBar, TextField } from '../components/ui'
+import { Badge, Button, Card, Checkbox, EmptyState, Legend, ProgressBar, TextField } from '../components/ui'
 import { TARGET_MINGGU_PERSIAPAN, TUJUAN_2026 } from '../data/fakta2026'
 import { daftarTenggat, evaluasiStats, formatTanggal, persiapanStats, timelineStats, todayIso, totalAnggaran, uid, rupiah } from '../lib/utils'
 
-function Stat({ label, value, sub, href }: { label: string; value: string | number; sub?: string; href: string }) {
+function Stat({ label, value, sub, href, flag }: { label: string; value: string | number; sub?: string; href: string; flag?: boolean }) {
   return (
-    <a href={href} className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors hover:border-navy-200 hover:bg-navy-50/40">
-      <div className="text-xs font-medium text-slate-500">{label}</div>
-      <div className="mt-1 text-2xl font-semibold text-navy-900">{value}</div>
-      {sub && <div className="mt-0.5 text-xs text-slate-500">{sub}</div>}
+    <a href={href} className="group block bg-paper px-4 py-5 transition-colors hover:bg-ink-100 max-xl:last:col-span-2 sm:px-5">
+      <div className="text-xs text-ink-500">{label}</div>
+      <div className="mt-2 text-3xl font-semibold tracking-[-0.03em] text-ink-900">{value}</div>
+      {sub && <div className={`mt-1 font-mono text-xs ${flag ? 'text-accent' : 'text-ink-500'}`}>{sub}</div>}
     </a>
+  )
+}
+
+function Counts({ rows }: { rows: [string, number][] }) {
+  return (
+    <dl className="divide-y divide-ink-200 text-sm">
+      {rows.map(([k, v]) => (
+        <div key={k} className="flex items-baseline justify-between py-1.5">
+          <dt className="text-ink-600">{k}</dt>
+          <dd className="font-mono text-xs text-ink-900">{v}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+function NumberedList({ items }: { items: readonly string[] }) {
+  return (
+    <ol className="space-y-2">
+      {items.map((t, i) => (
+        <li key={t} className="grid grid-cols-[1.75rem_1fr] text-sm leading-relaxed text-ink-600">
+          <span className="font-mono text-xs leading-6 text-ink-400">{String(i + 1).padStart(2, '0')}</span>
+          <span>{t}</span>
+        </li>
+      ))}
+    </ol>
   )
 }
 
@@ -48,90 +74,84 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title="Dashboard Persiapan PPRA 2027"
-        desc={
-          <>
-            {state.profil.namaKetua} · Ketua Komite PPRA {state.profil.namaRS} <Badge sumber="konfirmasi">SK perlu konfirmasi</Badge>
-            <br />
-            Target: progress persiapan disampaikan kepada Direktur pada{' '}
-            <strong>{state.profil.tanggalPresentasi ? formatTanggal(state.profil.tanggalPresentasi) : 'awal Desember 2026'}</strong>.
-          </>
-        }
-      />
-      <Legend />
+    <div className="space-y-12">
+      <header>
+        <p className="font-mono text-xs text-ink-500">Dashboard persiapan · {state.profil.namaRS}</p>
+        <h1 className="mt-4 max-w-3xl text-[2.125rem] font-semibold leading-[1.08] tracking-[-0.035em] text-ink-900 sm:mt-5 sm:text-5xl">
+          Persiapan Program Kerja PPRA 2027
+        </h1>
+        <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-pretty text-ink-600 sm:mt-5">
+          {state.profil.namaKetua}, Ketua Komite PPRA <Badge sumber="konfirmasi">SK perlu konfirmasi</Badge>. Progres persiapan disampaikan kepada Direktur pada{' '}
+          <span className="text-ink-900">{state.profil.tanggalPresentasi ? formatTanggal(state.profil.tanggalPresentasi) : 'awal Desember 2026'}</span>.
+        </p>
+        <div className="mt-6">
+          <Legend />
+        </div>
+      </header>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-        <Stat label="Progres persiapan 7 hari" value={`${ps.pct}%`} sub={`${ps.done} dari ${ps.total} butir`} href="#/persiapan" />
+      <div className="grid grid-cols-2 gap-px border-y border-ink-900 bg-ink-200 md:grid-cols-3 xl:grid-cols-5">
+        <Stat label="Persiapan 7 hari" value={`${ps.pct}%`} sub={`${ps.done} dari ${ps.total} butir`} href="#/persiapan" />
         <Stat label="Program kerja 2027" value={state.program.length} sub={`${jumlahKegiatan} kegiatan pokok`} href="#/program" />
         <Stat label="Kegiatan 2026 terverifikasi" value={`${state.evaluasi.length - ev['Belum diverifikasi']}/${state.evaluasi.length}`} sub={`${ev['Terlaksana']} terlaksana`} href="#/evaluasi" />
-        <Stat label="Info perlu konfirmasi" value={konfirmasiTerbuka} sub={`dari ${state.konfirmasi.length} butir`} href="#/konfirmasi" />
-        <Stat label="Draft anggaran 2027" value={ang.total ? rupiah(ang.total) : '—'} sub={ang.lengkap ? 'lengkap' : 'belum lengkap'} href="#/program" />
+        <Stat label="Info perlu konfirmasi" value={konfirmasiTerbuka} sub={`dari ${state.konfirmasi.length} butir`} href="#/konfirmasi" flag={konfirmasiTerbuka > 0} />
+        <Stat label="Draft anggaran 2027" value={ang.total ? rupiah(ang.total) : '—'} sub={ang.lengkap ? 'lengkap' : 'belum lengkap'} href="#/program" flag={!ang.lengkap} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card title="Progres per hari" className="lg:col-span-2" right={<a className="no-print text-sm text-navy-700 hover:underline" href="#/persiapan">Buka checklist</a>}>
-          <div className="space-y-3">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <Card title="Progres per hari" right={<a className="no-print link-underline text-sm text-ink-500 hover:text-ink-900" href="#/persiapan">Buka checklist →</a>}>
+          <ol className="divide-y divide-ink-200">
             {ps.perHari.map((h) => (
-              <a key={h.hari} href="#/persiapan" className="block">
-                <ProgressBar value={Math.round((h.done / h.total) * 100)} label={`Hari ${h.hari} – ${h.judul}`} />
-              </a>
+              <li key={h.hari}>
+                <a href="#/persiapan" className="grid grid-cols-[1.75rem_1fr] items-center py-3 transition-colors hover:bg-ink-100/50">
+                  <span className="font-mono text-xs text-ink-400">{String(h.hari).padStart(2, '0')}</span>
+                  <ProgressBar value={Math.round((h.done / h.total) * 100)} label={h.judul} />
+                </a>
+              </li>
             ))}
-          </div>
+          </ol>
         </Card>
-        <Card title="Status kegiatan">
-          <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Evaluasi 2026</h3>
-          <dl className="mb-4 space-y-1 text-sm">
-            {Object.entries(ev).map(([k, v]) => (
-              <div key={k} className="flex justify-between">
-                <dt className="text-slate-600">{k}</dt>
-                <dd className="font-medium text-navy-900">{v}</dd>
-              </div>
-            ))}
-          </dl>
-          <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-500">Kegiatan 2027 (timeline)</h3>
-          <dl className="space-y-1 text-sm">
-            <div className="flex justify-between"><dt className="text-slate-600">Selesai</dt><dd className="font-medium">{tl.Selesai}</dd></div>
-            <div className="flex justify-between"><dt className="text-slate-600">Berjalan</dt><dd className="font-medium">{tl.Berjalan}</dd></div>
-            <div className="flex justify-between"><dt className="text-slate-600">Belum mulai</dt><dd className="font-medium">{tl['Belum mulai']}</dd></div>
-            <div className="flex justify-between"><dt className="text-slate-600">Tertunda</dt><dd className="font-medium">{tl.Tertunda}</dd></div>
-          </dl>
-        </Card>
+        <div className="space-y-10">
+          <Card title="Evaluasi 2026">
+            <Counts rows={Object.entries(ev)} />
+          </Card>
+          <Card title="Kegiatan 2027">
+            <Counts rows={[['Selesai', tl.Selesai], ['Berjalan', tl.Berjalan], ['Belum mulai', tl['Belum mulai']], ['Tertunda', tl.Tertunda]]} />
+          </Card>
+        </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card title="Tenggat terdekat">
+      <div className="grid gap-12 lg:grid-cols-2">
+        <Card title="Tenggat terdekat" right={<span className="font-mono text-xs text-ink-400">{tenggat.length}</span>}>
           {!state.profil.tanggalMulaiPersiapan && (
-            <p className="mb-3 text-sm text-slate-600">
-              Isi <a href="#/pengaturan" className="text-navy-700 underline">tanggal mulai persiapan</a> agar tenggat Hari 1–7 muncul di sini.
+            <p className="mb-3 text-sm text-ink-500">
+              Isi <a href="#/pengaturan" className="text-ink-900 underline decoration-ink-300 underline-offset-4 hover:decoration-ink-900">tanggal mulai persiapan</a> agar tenggat Hari 1–7 muncul di sini.
             </p>
           )}
           {tenggat.length === 0 ? (
             <EmptyState title="Belum ada tenggat mendatang">Tenggat diambil dari jadwal persiapan, timeline 2027, dan pengingat Anda.</EmptyState>
           ) : (
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-ink-200">
               {tenggat.map((t, i) => (
-                <li key={i} className="flex items-start justify-between gap-3 py-2">
-                  <a href={t.href} className="text-sm text-slate-800 hover:text-navy-700">
+                <li key={i} className="flex items-baseline justify-between gap-4 py-2.5">
+                  <a href={t.href} className="text-sm text-ink-900 hover:text-accent">
                     {t.label}
-                    <span className="block text-xs text-slate-500">{t.sumber}</span>
+                    <span className="mt-0.5 block text-xs text-ink-500">{t.sumber}</span>
                   </a>
-                  <span className="whitespace-nowrap text-sm font-medium text-navy-800">{formatTanggal(t.tanggal)}</span>
+                  <span className="whitespace-nowrap font-mono text-xs text-ink-600">{formatTanggal(t.tanggal)}</span>
                 </li>
               ))}
             </ul>
           )}
-          {terlewat.length > 0 && <p className="mt-2 text-xs text-amber-700">{terlewat.length} tenggat sudah lewat dan belum ditandai selesai.</p>}
+          {terlewat.length > 0 && <p className="mt-3 text-xs text-accent">{terlewat.length} tenggat sudah lewat dan belum ditandai selesai.</p>}
         </Card>
 
         <Card title="Pengingat">
           {otomatis.length > 0 && (
-            <ul className="mb-4 space-y-1.5">
+            <ul className="mb-5 space-y-2">
               {otomatis.map((t, i) => (
-                <li key={i} className="flex gap-2 text-sm text-slate-700">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
-                  {t}
+                <li key={i} className="grid grid-cols-[0.875rem_1fr] text-sm leading-relaxed text-ink-600">
+                  <span className="text-accent" aria-hidden>–</span>
+                  <span>{t}</span>
                 </li>
               ))}
             </ul>
@@ -141,7 +161,7 @@ export default function Dashboard() {
               <div key={p.id} className="flex items-start gap-2">
                 <div className="flex-1">
                   <Checkbox id={p.id} checked={p.selesai} onChange={(v) => update((s) => { s.pengingat.find((x) => x.id === p.id)!.selesai = v })}>
-                    {p.teks} {p.tanggal && <span className="text-xs text-slate-500">· {formatTanggal(p.tanggal)}</span>}
+                    {p.teks} {p.tanggal && <span className="font-mono text-xs text-ink-500">· {formatTanggal(p.tanggal)}</span>}
                   </Checkbox>
                 </div>
                 <Button variant="ghost" title="Hapus pengingat" onClick={() => update((s) => { s.pengingat = s.pengingat.filter((x) => x.id !== p.id) })}>
@@ -158,22 +178,18 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-12 lg:grid-cols-2">
         <Card title="Target akhir minggu persiapan" right={<Badge sumber="rekomendasi" />}>
-          <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-700">
-            {TARGET_MINGGU_PERSIAPAN.map((t) => <li key={t}>{t}</li>)}
-          </ol>
+          <NumberedList items={TARGET_MINGGU_PERSIAPAN} />
         </Card>
         <Card title="Tujuan program PPRA RSCC" right={<Badge sumber="fakta" />}>
-          <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-700">
-            {TUJUAN_2026.map((t) => <li key={t}>{t}</li>)}
-          </ol>
-          <p className="mt-3 text-xs text-slate-500">Tujuan pada dokumen Program Kerja 2026; dapat dipertahankan untuk 2027 setelah ditinjau.</p>
+          <NumberedList items={TUJUAN_2026} />
+          <p className="mt-4 text-xs text-ink-500">Tujuan pada dokumen Program Kerja 2026; dapat dipertahankan untuk 2027 setelah ditinjau.</p>
         </Card>
       </div>
 
       <Card title="Tautan cepat" className="no-print">
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ['#/persiapan', 'Lanjutkan checklist 7 hari'],
             ['#/evaluasi', 'Verifikasi kegiatan 2026'],
@@ -184,11 +200,14 @@ export default function Dashboard() {
             ['#/koordinasi', 'Siapkan pertemuan unit'],
             ['#/unduh', 'Unduh dokumen'],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="flex items-center justify-between rounded-md border border-slate-200 px-3 py-2 text-sm text-navy-800 hover:border-navy-200 hover:bg-navy-50">
-              {label} <ArrowRight size={14} />
-            </a>
+            <li key={href} className="border-b border-ink-200">
+              <a href={href} className="group flex items-baseline justify-between gap-3 py-2.5 text-sm text-ink-900">
+                <span className="link-underline">{label}</span>
+                <span className="text-ink-300 transition group-hover:translate-x-0.5 group-hover:text-ink-900" aria-hidden>→</span>
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       </Card>
     </div>
   )

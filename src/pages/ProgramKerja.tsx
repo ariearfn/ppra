@@ -46,7 +46,7 @@ export default function ProgramKerja() {
             role="tab"
             aria-selected={x.id === p.id}
             onClick={() => setAktif(x.id)}
-            className={`shrink-0 rounded-md border px-3 py-2 text-left text-sm ${x.id === p.id ? 'border-navy-700 bg-navy-700 text-white' : 'border-slate-200 bg-white text-navy-800 hover:bg-navy-50'}`}
+            className={`shrink-0 rounded-md border px-3 py-2 text-left text-sm transition-colors ${x.id === p.id ? 'border-ink-900 bg-ink-900 text-paper' : 'border-ink-200 bg-card text-ink-900 hover:border-ink-900'}`}
           >
             <span className="block text-xs opacity-80">{x.kode}</span>
             <span className="block max-w-[14rem] truncate font-medium">{x.nama}</span>
@@ -67,9 +67,9 @@ export default function ProgramKerja() {
 
       <Card
         title="Estimasi anggaran program"
-        right={<span className="text-sm">Subtotal: <strong className="text-navy-900">{rupiah(tp.total)}</strong> {!tp.lengkap && <Konfirmasi teks="Belum lengkap" />}</span>}
+        right={<span className="text-sm">Subtotal: <strong className="text-ink-900">{rupiah(tp.total)}</strong> {!tp.lengkap && <Konfirmasi teks="Belum lengkap" />}</span>}
       >
-        <p className="mb-3 text-sm text-slate-600">Isi volume dan harga satuan berdasarkan kebutuhan nyata dan standar biaya RS. Baris tanpa harga ditandai "Perlu konfirmasi" dan tidak dihitung.</p>
+        <p className="mb-3 text-sm text-stone-600">Isi volume dan harga satuan berdasarkan kebutuhan nyata dan standar biaya RS. Baris tanpa harga ditandai "Perlu konfirmasi" dan tidak dihitung.</p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[820px] border-collapse">
             <thead>

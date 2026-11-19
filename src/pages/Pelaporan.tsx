@@ -13,12 +13,12 @@ function TabelField({ f, value, onChange }: { f: TemplateField; value: string; o
   const save = (r: string[][]) => onChange(JSON.stringify(r))
   return (
     <div>
-      <span className="mb-1 block text-xs font-medium text-slate-600">{f.label}</span>
+      <span className="mb-1 block text-xs font-medium text-stone-600">{f.label}</span>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse">
           <thead><tr><Th className="w-8">No</Th>{kolom.map((k) => <Th key={k}>{k}</Th>)}<Th className="no-print w-8" /></tr></thead>
           <tbody>
-            {rows.length === 0 && <tr><Td className="text-slate-400">—</Td>{kolom.map((k) => <Td key={k} />)}<Td className="no-print" /></tr>}
+            {rows.length === 0 && <tr><Td className="text-stone-400">—</Td>{kolom.map((k) => <Td key={k} />)}<Td className="no-print" /></tr>}
             {rows.map((r, i) => (
               <tr key={i}>
                 <Td>{i + 1}</Td>
@@ -61,7 +61,7 @@ export default function Pelaporan() {
     return (
       <div className="space-y-6">
         <div className="no-print"><Button variant="ghost" onClick={() => setDraftId(null)}><ArrowLeft size={14} /> Kembali ke daftar</Button></div>
-        <div className="print-only mb-2 text-xs text-slate-500">Komite PPRA {state.profil.namaRS}</div>
+        <div className="print-only mb-2 text-xs text-stone-500">Komite PPRA {state.profil.namaRS}</div>
         <PageHeader
           title={draft.judul}
           desc={tpl.deskripsi}
@@ -92,7 +92,7 @@ export default function Pelaporan() {
         </Card>
         {tpl.lampiran.length > 0 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-navy-900">Lampiran (otomatis dari data aplikasi)</h2>
+            <h2 className="text-lg font-semibold text-ink-900">Lampiran (otomatis dari data aplikasi)</h2>
             {tpl.lampiran.map((l, i) => (
               <Card key={l} title={`Lampiran ${i + 1}. ${LAMPIRAN_JUDUL[l]}`}>
                 <Lampiran jenis={l} state={state} />
@@ -120,15 +120,15 @@ export default function Pelaporan() {
           const drafts = state.laporan.filter((d) => d.templateId === t.id)
           return (
             <Card key={t.id} title={t.judul}>
-              <p className="text-sm text-slate-600">{t.deskripsi}</p>
-              {t.lampiran.length > 0 && <p className="mt-2 text-xs text-slate-500">Lampiran otomatis: {t.lampiran.map((l) => LAMPIRAN_JUDUL[l].toLowerCase()).join(', ')}.</p>}
+              <p className="text-sm text-stone-600">{t.deskripsi}</p>
+              {t.lampiran.length > 0 && <p className="mt-2 text-xs text-stone-500">Lampiran otomatis: {t.lampiran.map((l) => LAMPIRAN_JUDUL[l].toLowerCase()).join(', ')}.</p>}
               <div className="mt-3 space-y-1">
                 {drafts.length === 0 ? (
-                  <p className="text-xs italic text-slate-400">Belum ada draft.</p>
+                  <p className="text-xs italic text-ink-500">Belum ada draft.</p>
                 ) : (
                   drafts.map((d) => (
-                    <div key={d.id} className="flex items-center justify-between gap-2 rounded-md border border-slate-200 px-2 py-1.5">
-                      <button type="button" className="min-w-0 flex-1 truncate text-left text-sm text-navy-800 hover:underline" onClick={() => { setTemplateId(t.id); setDraftId(d.id) }}>{d.judul}</button>
+                    <div key={d.id} className="flex items-center justify-between gap-2 rounded-md border border-stone-200 px-2 py-1.5">
+                      <button type="button" className="min-w-0 flex-1 truncate text-left text-sm text-ink-800 hover:underline" onClick={() => { setTemplateId(t.id); setDraftId(d.id) }}>{d.judul}</button>
                       <Button variant="ghost" title="Hapus draft" onClick={() => { if (confirm('Hapus draft ini?')) update((s) => { s.laporan = s.laporan.filter((x) => x.id !== d.id) }) }}><Trash2 size={14} /></Button>
                     </div>
                   ))

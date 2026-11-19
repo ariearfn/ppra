@@ -48,7 +48,7 @@ export default function Pengaturan() {
           </Button>
           <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) impor(f); e.target.value = '' }} />
         </div>
-        {pesan && <p className="mt-3 text-sm text-navy-800" role="status">{pesan}</p>}
+        {pesan && <p className="mt-3 text-sm text-ink-800" role="status">{pesan}</p>}
       </Card>
     </div>
   )

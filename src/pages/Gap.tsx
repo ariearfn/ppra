@@ -4,7 +4,7 @@ import { AreaField, Badge, Button, Card, EmptyState, Note, PageHeader, SelectFie
 import { PRIORITAS, type GapRow, type Prioritas } from '../types'
 
 const PRIO_CLS: Record<Prioritas, string> = {
-  '': 'bg-slate-50 text-slate-500 border-slate-200',
+  '': 'bg-stone-50 text-stone-500 border-stone-200',
   Tinggi: 'bg-red-50 text-red-700 border-red-200',
   Sedang: 'bg-amber-50 text-amber-800 border-amber-300',
   Rendah: 'bg-emerald-50 text-emerald-800 border-emerald-200',
@@ -38,9 +38,9 @@ export default function Gap() {
                 {prioritas.map((g) => (
                   <tr key={g.id}>
                     <Td className="font-medium">{g.area}</Td>
-                    <Td><span className={`rounded-full border px-2 py-0.5 text-xs ${PRIO_CLS[g.prioritas]}`}>{g.prioritas}</span></Td>
-                    <Td className="whitespace-pre-wrap">{g.rekomendasi || <span className="text-slate-400">—</span>}</Td>
-                    <Td>{g.pic || <span className="text-slate-400">—</span>}</Td>
+                    <Td><span className={`rounded-sm border px-2 py-0.5 text-xs ${PRIO_CLS[g.prioritas]}`}>{g.prioritas}</span></Td>
+                    <Td className="whitespace-pre-wrap">{g.rekomendasi || <span className="text-stone-400">—</span>}</Td>
+                    <Td>{g.pic || <span className="text-stone-400">—</span>}</Td>
                   </tr>
                 ))}
               </tbody>
@@ -51,10 +51,10 @@ export default function Gap() {
 
       <div className="grid gap-4 xl:grid-cols-2">
         {state.gap.map((g, i) => (
-          <Card key={g.id} title={`${i + 1}. ${g.area}`} right={<span className={`rounded-full border px-2 py-0.5 text-xs ${PRIO_CLS[g.prioritas]}`}>{g.prioritas || 'Prioritas belum ditetapkan'}</span>}>
-            <details className="no-print mb-3 rounded-md bg-slate-50 px-3 py-2 text-sm">
-              <summary className="cursor-pointer text-slate-700">Pertanyaan kunci untuk assessment</summary>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-slate-600">{g.pertanyaanKunci.map((q) => <li key={q}>{q}</li>)}</ul>
+          <Card key={g.id} title={`${i + 1}. ${g.area}`} right={<span className={`rounded-sm border px-2 py-0.5 text-xs ${PRIO_CLS[g.prioritas]}`}>{g.prioritas || 'Prioritas belum ditetapkan'}</span>}>
+            <details className="no-print mb-3 rounded-md bg-stone-50 px-3 py-2 text-sm">
+              <summary className="cursor-pointer text-stone-700">Pertanyaan kunci untuk assessment</summary>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-stone-600">{g.pertanyaanKunci.map((q) => <li key={q}>{q}</li>)}</ul>
             </details>
             <div className="grid gap-3 sm:grid-cols-2">
               <AreaField label="Kondisi saat ini" value={g.kondisi} onChange={(v) => set(g.id, { kondisi: v })} placeholder="Isi setelah assessment" />
@@ -62,7 +62,7 @@ export default function Gap() {
               <AreaField label="Bukti" value={g.bukti} onChange={(v) => set(g.id, { bukti: v })} placeholder="Dokumen/data pendukung" />
               <AreaField label="Rekomendasi perbaikan" value={g.rekomendasi} onChange={(v) => set(g.id, { rekomendasi: v })} placeholder="Tindakan yang diusulkan" />
               <label className="block">
-                <span className="mb-1 block text-xs font-medium text-slate-600">Prioritas</span>
+                <span className="mb-1 block text-xs font-medium text-stone-600">Prioritas</span>
                 <SelectField value={g.prioritas} options={PRIORITAS} onChange={(v) => set(g.id, { prioritas: v })} ariaLabel={`Prioritas ${g.area}`} />
               </label>
               <TextField label="PIC" value={g.pic} onChange={(v) => set(g.id, { pic: v })} placeholder="Unit/nama penanggung jawab" />

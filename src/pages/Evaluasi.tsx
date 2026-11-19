@@ -32,12 +32,12 @@ export default function Evaluasi() {
       </Note>
       <div className="flex flex-wrap gap-2">
         {STATUS_2026.map((s) => (
-          <span key={s} className={`rounded-full border px-3 py-1 text-xs font-medium ${STATUS_CLS[s]}`}>{s}: {stats[s]}</span>
+          <span key={s} className={`rounded-sm border px-2 py-1 text-xs font-medium ${STATUS_CLS[s]}`}>{s} <span className="font-mono">{stats[s]}</span></span>
         ))}
       </div>
 
-      <div className="hidden overflow-x-auto rounded-lg border border-slate-200 md:block">
-        <table className="w-full min-w-[1100px] border-collapse bg-white">
+      <div className="scrollbar-thin hidden overflow-x-auto xl:block">
+        <table className="w-full min-w-[1100px] border-collapse">
           <thead>
             <tr>
               <Th className="w-8">No</Th><Th className="w-44">Kegiatan</Th><Th className="w-32">Rencana</Th><Th className="w-40">Status</Th>
@@ -49,12 +49,12 @@ export default function Evaluasi() {
               <tr key={r.id}>
                 <Td>{i + 1}</Td>
                 <Td>
-                  {r.custom ? <TextField value={r.kegiatan} onChange={(v) => set(r.id, { kegiatan: v })} ariaLabel="Nama kegiatan" placeholder="Nama kegiatan" /> : <span className="font-medium text-navy-900">{r.kegiatan}</span>}
-                  {r.buktiDicari && <span className="mt-1 block text-xs text-slate-500">Bukti dicari: {r.buktiDicari}</span>}
+                  {r.custom ? <TextField value={r.kegiatan} onChange={(v) => set(r.id, { kegiatan: v })} ariaLabel="Nama kegiatan" placeholder="Nama kegiatan" /> : <span className="font-medium text-ink-900">{r.kegiatan}</span>}
+                  {r.buktiDicari && <span className="mt-1 block text-xs text-stone-500">Bukti dicari: {r.buktiDicari}</span>}
                 </Td>
                 <Td>{r.custom ? <TextField value={r.rencana} onChange={(v) => set(r.id, { rencana: v })} ariaLabel="Rencana" /> : r.rencana}</Td>
                 <Td>
-                  <SelectField value={r.status} options={STATUS_2026} onChange={(v) => set(r.id, { status: v })} ariaLabel={`Status ${r.kegiatan}`} />
+                  <SelectField className="min-w-40" value={r.status} options={STATUS_2026} onChange={(v) => set(r.id, { status: v })} ariaLabel={`Status ${r.kegiatan}`} />
                 </Td>
                 <Td><AreaField className="min-w-36" value={r.bukti} onChange={(v) => set(r.id, { bukti: v })} ariaLabel="Bukti" placeholder="Dokumen yang sudah dilihat" /></Td>
                 <Td><AreaField className="min-w-36" value={r.kendala} onChange={(v) => set(r.id, { kendala: v })} ariaLabel="Kendala" /></Td>
@@ -69,18 +69,24 @@ export default function Evaluasi() {
         </table>
       </div>
 
-      <div className="space-y-3 md:hidden">
+      <div className="space-y-10 xl:hidden">
         {state.evaluasi.map((r, i) => (
-          <Card key={r.id} title={`${i + 1}. ${r.kegiatan || 'Kegiatan baru'}`} right={<span className={`rounded-full border px-2 py-0.5 text-[11px] ${STATUS_CLS[r.status]}`}>{r.status}</span>}>
-            <div className="space-y-2">
-              {r.custom && <TextField label="Nama kegiatan" value={r.kegiatan} onChange={(v) => set(r.id, { kegiatan: v })} />}
-              <p className="text-xs text-slate-500">Rencana: {r.rencana || '—'} · Bukti dicari: {r.buktiDicari || '—'}</p>
-              <SelectField value={r.status} options={STATUS_2026} onChange={(v) => set(r.id, { status: v })} ariaLabel={`Status ${r.kegiatan}`} />
-              <AreaField label="Bukti" value={r.bukti} onChange={(v) => set(r.id, { bukti: v })} />
+          <Card key={r.id} title={`${i + 1}. ${r.kegiatan || 'Kegiatan baru'}`} right={<span className={`rounded-sm border px-2 py-0.5 text-xs ${STATUS_CLS[r.status]}`}>{r.status}</span>}>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {r.custom && <div className="sm:col-span-2"><TextField label="Nama kegiatan" value={r.kegiatan} onChange={(v) => set(r.id, { kegiatan: v })} /></div>}
+              <dl className="grid grid-cols-[6.5rem_1fr] gap-x-3 gap-y-1 text-sm sm:col-span-2">
+                <dt className="text-ink-500">Rencana</dt><dd className="text-ink-900">{r.rencana || '—'}</dd>
+                <dt className="text-ink-500">Bukti dicari</dt><dd className="text-ink-900">{r.buktiDicari || '—'}</dd>
+              </dl>
+              <label className="block sm:col-span-2">
+                <span className="mb-1 block text-xs font-medium text-ink-500">Status</span>
+                <SelectField value={r.status} options={STATUS_2026} onChange={(v) => set(r.id, { status: v })} ariaLabel={`Status ${r.kegiatan}`} />
+              </label>
+              <AreaField label="Bukti" value={r.bukti} onChange={(v) => set(r.id, { bukti: v })} placeholder="Dokumen yang sudah dilihat" />
               <AreaField label="Kendala" value={r.kendala} onChange={(v) => set(r.id, { kendala: v })} />
               <AreaField label="Catatan" value={r.catatan} onChange={(v) => set(r.id, { catatan: v })} />
               <AreaField label="Tindak lanjut" value={r.tindakLanjut} onChange={(v) => set(r.id, { tindakLanjut: v })} />
-              {r.custom && <Button variant="danger" onClick={() => update((s) => { s.evaluasi = s.evaluasi.filter((x) => x.id !== r.id) })}><Trash2 size={14} /> Hapus</Button>}
+              {r.custom && <div className="sm:col-span-2"><Button variant="danger" onClick={() => update((s) => { s.evaluasi = s.evaluasi.filter((x) => x.id !== r.id) })}><Trash2 size={14} /> Hapus</Button></div>}
             </div>
           </Card>
         ))}

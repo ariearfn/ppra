@@ -5,9 +5,9 @@ import { STATUS_KONFIRMASI, type KonfirmasiItem } from '../types'
 import { uid } from '../lib/utils'
 
 const CLS = {
-  'Perlu konfirmasi': 'border-l-amber-400',
-  'Sedang ditanyakan': 'border-l-sky-400',
-  'Sudah dikonfirmasi': 'border-l-emerald-500',
+  'Perlu konfirmasi': 'border-l-accent',
+  'Sedang ditanyakan': 'border-l-ink-400',
+  'Sudah dikonfirmasi': 'border-l-emerald-700',
 }
 
 export default function Konfirmasi() {
@@ -20,18 +20,18 @@ export default function Konfirmasi() {
       <PageHeader
         title="Info Perlu Konfirmasi"
         desc="Informasi penting yang belum tersedia di brief maupun dokumen 2026. Jangan mengisi dengan asumsi: catat kepada siapa ditanyakan dan jawabannya."
-        badges={<><Badge sumber="konfirmasi" /><span className="text-xs text-slate-500">{sudah} dari {state.konfirmasi.length} sudah dikonfirmasi</span></>}
+        badges={<><Badge sumber="konfirmasi" /><span className="text-xs text-stone-500">{sudah} dari {state.konfirmasi.length} sudah dikonfirmasi</span></>}
         actions={<Button onClick={() => window.print()}><Printer size={14} /> Cetak daftar</Button>}
       />
       <div className="space-y-3">
         {state.konfirmasi.map((k, i) => (
-          <div key={k.id} className={`rounded-lg border border-l-4 border-slate-200 bg-white p-4 shadow-sm ${CLS[k.status]}`}>
+          <div key={k.id} className={`rounded-md border border-l-2 border-ink-200 bg-card p-4 ${CLS[k.status]}`}>
             <div className="grid gap-3 md:grid-cols-[1fr_14rem]">
               <div>
                 {k.id.startsWith('kf-x') ? (
                   <AreaField value={k.pertanyaan} onChange={(v) => set(k.id, { pertanyaan: v })} ariaLabel="Pertanyaan" placeholder="Hal yang perlu dikonfirmasi" />
                 ) : (
-                  <p className="text-sm font-medium text-navy-900">{i + 1}. {k.pertanyaan}</p>
+                  <p className="text-sm font-medium text-ink-900">{i + 1}. {k.pertanyaan}</p>
                 )}
                 <div className="mt-2"><AreaField value={k.jawaban} onChange={(v) => set(k.id, { jawaban: v })} ariaLabel="Jawaban" placeholder="Jawaban / hasil konfirmasi, sumber, tanggal" /></div>
               </div>

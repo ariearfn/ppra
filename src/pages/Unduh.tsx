@@ -37,11 +37,11 @@ export default function Unduh() {
         {DOKUMEN.map((d) => (
           <Card key={d.jenis}>
             <div className="flex items-start gap-3">
-              <div className="rounded-md bg-navy-50 p-2 text-navy-700"><d.icon size={22} /></div>
+              <div className="rounded-md bg-ink-50 p-2 text-ink-700"><d.icon size={22} /></div>
               <div className="min-w-0 flex-1">
-                <h2 className="font-semibold text-navy-900">{d.judul}</h2>
-                <p className="text-xs text-slate-500">{d.format} · {FILES[d.jenis]}</p>
-                <p className="mt-2 text-sm text-slate-600">{d.isi}</p>
+                <h2 className="font-semibold text-ink-900">{d.judul}</h2>
+                <p className="text-xs text-stone-500">{d.format} · {FILES[d.jenis]}</p>
+                <p className="mt-2 text-sm text-stone-600">{d.isi}</p>
                 <Button variant="primary" className="mt-3" onClick={() => unduh(d.jenis)} disabled={loading !== null}>
                   {loading === d.jenis ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Unduh {d.format.split(' ')[0]}
                 </Button>
